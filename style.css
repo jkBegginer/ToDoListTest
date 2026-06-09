@@ -6,10 +6,10 @@
 /* ── 디자인 토큰 (다크) ── */
 :root {
   --bg-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-  --glass-bg: rgba(255, 255, 255, 0.06);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  --glass-blur: blur(16px);
+  --glass-bg: rgba(20, 15, 60, 0.75);
+  --glass-border: rgba(167, 139, 250, 0.18);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --glass-blur: none;  /* 다크 모드: blur 제거 → 번쩍임 원천 차단 */
 
   --text-primary: #f1f0ff;
   --text-secondary: rgba(241, 240, 255, 0.6);
