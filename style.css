@@ -110,9 +110,8 @@ body::before {
   -webkit-backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-shadow);
   border-radius: var(--radius-xl);
-  /* GPU 레이어 분리 → backdrop-filter 번쩍임 방지 */
+  /* GPU 레이어 분리 → 번쩍임 방지 */
   transform: translateZ(0);
-  isolation: isolate;
 }
 
 /* ==============================
