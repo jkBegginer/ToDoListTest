@@ -30,8 +30,8 @@
   --priority-medium: #fb923c;
   --priority-low: #34d399;
 
-  --input-bg: rgba(255, 255, 255, 0.08);
-  --input-border: rgba(255, 255, 255, 0.15);
+  --input-bg: rgba(167, 139, 250, 0.08);
+  --input-border: rgba(167, 139, 250, 0.22);
   --input-focus-border: #a78bfa;
 
   --btn-primary-bg: linear-gradient(135deg, #7c3aed, #a78bfa);
