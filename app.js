@@ -26,6 +26,16 @@ const STORAGE_KEYS = {
 };
 
 // ============================================================
+//  할 일 템플릿 데이터
+// ============================================================
+const TEMPLATE_DATA = {
+  '운동': { icon: '🏋️', items: ['스쿼트 3세트', '런닝 30분', '플랭크 1분', '푸쉬업 20개', '스트레칭 10분'] },
+  '공부': { icon: '📚', items: ['영어 단어 암기', '수학 문제 풀기', '프로그래밍 실습', '독서 30분', '강의 듣기'] },
+  '식단': { icon: '🍎', items: ['아침 식사 챙기기', '물 2L 마시기', '영양제 복용', '건강한 저녁 식사'] },
+  '생활': { icon: '🏠', items: ['방 청소하기', '분리수거 하기', '장보기', '가계부 작성', '일기 쓰기'] }
+};
+
+// ============================================================
 //  상태
 // ============================================================
 let todos = [];
@@ -83,6 +93,13 @@ const editRepeatSelect   = $('editRepeatSelect');
 const editDueDateInput   = $('editDueDateInput');
 const editCancelBtn  = $('editCancelBtn');
 const editSaveBtn    = $('editSaveBtn');
+
+// 템플릿
+const templateBtn        = $('templateBtn');
+const templateModal      = $('templateModal');
+const templateModalClose = $('templateModalClose');
+const templateTabs       = $('templateTabs');
+const templateList       = $('templateList');
 
 const toastContainer = $('toastContainer');
 
@@ -625,6 +642,60 @@ function addCategory() {
 }
 
 // ============================================================
+//  할 일 템플릿 모달 로직
+// ============================================================
+let activeTemplateTab = '운동';
+
+function renderTemplateTabs() {
+  templateTabs.innerHTML = '';
+  Object.keys(TEMPLATE_DATA).forEach(cat => {
+    const data = TEMPLATE_DATA[cat];
+    const btn = document.createElement('button');
+    btn.className = 'template-tab' + (activeTemplateTab === cat ? ' active' : '');
+    btn.textContent = `${data.icon} ${cat}`;
+    btn.setAttribute('role', 'tab');
+    btn.setAttribute('aria-selected', activeTemplateTab === cat ? 'true' : 'false');
+    btn.addEventListener('click', () => {
+      activeTemplateTab = cat;
+      renderTemplateTabs();
+      renderTemplateItems();
+    });
+    templateTabs.appendChild(btn);
+  });
+}
+
+function renderTemplateItems() {
+  templateList.innerHTML = '';
+  const items = TEMPLATE_DATA[activeTemplateTab].items;
+  items.forEach(itemText => {
+    const btn = document.createElement('button');
+    btn.className = 'template-item-btn';
+    btn.innerHTML = `<span>${TEMPLATE_DATA[activeTemplateTab].icon}</span><span>${escapeHtml(itemText)}</span>`;
+    btn.addEventListener('click', () => {
+      selectTemplate(activeTemplateTab, itemText);
+    });
+    templateList.appendChild(btn);
+  });
+}
+
+function selectTemplate(categoryName, itemText) {
+  todoInput.value = itemText;
+
+  // 카테고리가 존재하지 않으면 동적으로 추가
+  if (!categories.includes(categoryName)) {
+    categories.push(categoryName);
+    saveCategories();
+    renderCategorySelects();
+    renderCategoryTabs();
+  }
+
+  categorySelect.value = categoryName;
+  templateModal.hidden = true;
+  todoInput.focus();
+  showToast(`템플릿 '${itemText}'이(가) 선택되었습니다.`, 'success');
+}
+
+// ============================================================
 //  브라우저 알림 (Web Notification API)
 // ============================================================
 function checkNotificationPermission() {
@@ -791,6 +862,16 @@ function bindEvents() {
   editCancelBtn.addEventListener('click', closeEditModal);
   editModal.addEventListener('click', (e) => { if (e.target === editModal) closeEditModal(); });
 
+  // 템플릿 모달 열기/닫기
+  templateBtn.addEventListener('click', () => {
+    activeTemplateTab = '운동';
+    renderTemplateTabs();
+    renderTemplateItems();
+    templateModal.hidden = false;
+  });
+  templateModalClose.addEventListener('click', () => { templateModal.hidden = true; });
+  templateModal.addEventListener('click', (e) => { if (e.target === templateModal) templateModal.hidden = true; });
+
   // 편집 저장
   editSaveBtn.addEventListener('click', saveEdit);
   editTextInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') saveEdit(); });
@@ -799,6 +880,7 @@ function bindEvents() {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       catModal.hidden = true;
+      templateModal.hidden = true;
       closeEditModal();
     }
   });

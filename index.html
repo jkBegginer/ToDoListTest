@@ -76,6 +76,9 @@
           maxlength="200"
           autocomplete="off"
         />
+        <button id="templateBtn" class="add-btn template-btn" aria-label="템플릿 열기">
+          📋 템플릿
+        </button>
       </div>
       <div class="input-options">
         <div class="select-wrap">
@@ -155,6 +158,22 @@
     </section>
 
   </main>
+
+  <!-- ===== 템플릿 선택 모달 ===== -->
+  <div class="modal-overlay" id="templateModal" role="dialog" aria-modal="true" aria-label="할 일 템플릿 선택" hidden>
+    <div class="modal glass-card" style="max-width: 500px;">
+      <div class="modal-header">
+        <h2 class="modal-title">📋 할 일 템플릿</h2>
+        <button class="modal-close" id="templateModalClose" aria-label="닫기">✕</button>
+      </div>
+      <div class="template-tabs" id="templateTabs" role="tablist" aria-label="템플릿 카테고리 탭">
+        <!-- JS로 동적 생성 -->
+      </div>
+      <div class="template-list" id="templateList">
+        <!-- JS로 동적 생성 -->
+      </div>
+    </div>
+  </div>
 
   <!-- ===== 카테고리 관리 모달 ===== -->
   <div class="modal-overlay" id="catModal" role="dialog" aria-modal="true" aria-label="카테고리 관리" hidden>

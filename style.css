@@ -5,7 +5,7 @@
 
 /* ── 디자인 토큰 (다크) ── */
 :root {
-  --bg-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  --bg-gradient: linear-gradient(135deg, #4a3f9f 0%, #3d3491 60%, #2a2855 100%);
   --glass-bg: rgba(20, 15, 60, 0.75);
   --glass-border: rgba(167, 139, 250, 0.18);
   --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
@@ -1050,3 +1050,94 @@ body::before {
   .input-options { flex-direction: column; align-items: stretch; }
   .add-btn { width: 100%; justify-content: center; }
 }
+
+/* ==============================
+   템플릿 버튼 & 모달
+   ============================== */
+.template-btn {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  color: var(--accent-purple) !important;
+  box-shadow: none !important;
+}
+
+.template-btn:hover {
+  background: var(--accent-purple-dim) !important;
+  border-color: var(--accent-purple) !important;
+  box-shadow: var(--accent-purple-glow) !important;
+}
+
+.template-tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 0.75rem;
+  overflow-x: auto;
+}
+
+.template-tab {
+  padding: 0.4rem 0.9rem;
+  border-radius: 99px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.template-tab:hover {
+  border-color: var(--accent-purple);
+  color: var(--accent-purple);
+}
+
+.template-tab.active {
+  background: var(--accent-purple-dim);
+  border-color: var(--accent-purple);
+  color: var(--accent-purple);
+  font-weight: 600;
+}
+
+.template-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 0.2rem 0;
+}
+
+@media (max-width: 440px) {
+  .template-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.template-item-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--todo-bg);
+  border: 1px solid var(--todo-border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: var(--transition-fast);
+}
+
+.template-item-btn:hover {
+  background: var(--accent-purple-dim);
+  border-color: var(--accent-purple);
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 12px rgba(167, 139, 250, 0.15);
+}
+
