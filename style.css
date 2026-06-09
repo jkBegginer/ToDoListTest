@@ -97,9 +97,6 @@ body::before {
     radial-gradient(ellipse 50% 60% at 80% 80%, rgba(52, 211, 153, 0.06) 0%, transparent 60%);
   pointer-events: none;
   z-index: 0;
-  /* 배경 레이어를 GPU로 분리 → 리페인트 방지 */
-  transform: translateZ(0);
-  will-change: transform;
 }
 
 /* ── 글래스 카드 ── */
@@ -143,13 +140,14 @@ body::before {
   font-size: 1.4rem;
   color: var(--accent-purple);
   animation: pulse-glow 3s ease-in-out infinite;
-  will-change: opacity, filter;
+  will-change: opacity;
   transform: translateZ(0);
 }
 
+/* opacity만 사용 → GPU 컴포지터 전용, backdrop-filter 영향 없음 */
 @keyframes pulse-glow {
-  0%, 100% { opacity: 1;    filter: drop-shadow(0 0 4px rgba(167,139,250,0.6)); }
-  50%       { opacity: 0.8; filter: drop-shadow(0 0 12px rgba(167,139,250,0.9)); }
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.45; }
 }
 
 .logo-text {
