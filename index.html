@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="할 일을 스마트하게 관리하는 ToDoList 웹 애플리케이션" />
+  <meta property="og:title" content="ToDoList - 스마트 할 일 관리" />
+  <meta property="og:description" content="드래그&드롭, 카테고리, 마감일, 반복 할 일을 지원하는 투두리스트" />
+  <title>ToDoList - 스마트 할 일 관리</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== 헤더 ===== -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="logo">
+        <span class="logo-icon">✦</span>
+        <h1 class="logo-text">ToDoList</h1>
+      </div>
+      <p class="header-date" id="headerDate"></p>
+    </div>
+    <div class="header-right">
+      <button class="icon-btn" id="exportBtn" title="CSV 내보내기">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </button>
+      <button class="icon-btn" id="notifBtn" title="알림 설정">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+      <button class="icon-btn theme-toggle" id="themeToggle" title="테마 변경">
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="app-main">
+
+    <!-- ===== 통계 바 ===== -->
+    <section class="stats-section glass-card" aria-label="진행 통계">
+      <div class="stats-numbers">
+        <div class="stat-item">
+          <span class="stat-value" id="statTotal">0</span>
+          <span class="stat-label">전체</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-value accent-green" id="statDone">0</span>
+          <span class="stat-label">완료</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-value accent-purple" id="statPending">0</span>
+          <span class="stat-label">진행중</span>
+        </div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+      </div>
+      <div class="progress-label">
+        <span id="progressPercent">0%</span> 완료
+      </div>
+    </section>
+
+    <!-- ===== 입력 폼 ===== -->
+    <section class="input-section glass-card" aria-label="새 할 일 추가">
+      <div class="input-row">
+        <input
+          type="text"
+          id="todoInput"
+          class="todo-input"
+          placeholder="새 할 일을 입력하세요..."
+          maxlength="200"
+          autocomplete="off"
+        />
+      </div>
+      <div class="input-options">
+        <div class="select-wrap">
+          <select id="categorySelect" class="option-select" aria-label="카테고리">
+            <option value="전체" disabled>카테고리</option>
+          </select>
+        </div>
+        <div class="select-wrap">
+          <select id="prioritySelect" class="option-select" aria-label="우선순위">
+            <option value="high">🔴 높음</option>
+            <option value="medium" selected>🟡 보통</option>
+            <option value="low">🟢 낮음</option>
+          </select>
+        </div>
+        <div class="select-wrap">
+          <select id="repeatSelect" class="option-select" aria-label="반복">
+            <option value="none">🔂 반복없음</option>
+            <option value="daily">📅 매일</option>
+            <option value="weekly">📆 매주</option>
+            <option value="monthly">🗓️ 매월</option>
+          </select>
+        </div>
+        <input type="date" id="dueDateInput" class="date-input" aria-label="마감일" />
+        <button id="addBtn" class="add-btn" aria-label="할 일 추가">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          추가
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== 카테고리 탭 + 검색 ===== -->
+    <section class="filter-section" aria-label="필터 및 검색">
+      <div class="category-tabs-wrap">
+        <div class="category-tabs" id="categoryTabs" role="tablist" aria-label="카테고리 탭">
+          <!-- JS로 생성 -->
+        </div>
+        <button class="cat-manage-btn" id="catManageBtn" title="카테고리 관리">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        </button>
+      </div>
+      <div class="search-sort-row">
+        <div class="search-wrap">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="search" id="searchInput" class="search-input" placeholder="검색..." autocomplete="off" aria-label="할 일 검색" />
+        </div>
+        <div class="select-wrap">
+          <select id="sortSelect" class="option-select" aria-label="정렬">
+            <option value="default">기본순</option>
+            <option value="priority">우선순위순</option>
+            <option value="dueDate">마감일순</option>
+            <option value="name">이름순</option>
+            <option value="createdAt">생성일순</option>
+          </select>
+        </div>
+        <label class="toggle-wrap" title="완료 항목 보기">
+          <input type="checkbox" id="showDoneToggle" checked />
+          <span class="toggle-label">완료 표시</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- ===== 할 일 목록 ===== -->
+    <section class="list-section" aria-label="할 일 목록">
+      <div class="todo-list" id="todoList" role="list" aria-live="polite">
+        <!-- JS로 동적 생성 -->
+      </div>
+      <div class="empty-state" id="emptyState" aria-hidden="true">
+        <div class="empty-icon">✦</div>
+        <p>할 일이 없어요!</p>
+        <p class="empty-sub">위에서 새 할 일을 추가해보세요</p>
+      </div>
+      <div class="list-footer" id="listFooter">
+        <button class="clear-done-btn" id="clearDoneBtn">
+          완료된 항목 모두 삭제
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== 카테고리 관리 모달 ===== -->
+  <div class="modal-overlay" id="catModal" role="dialog" aria-modal="true" aria-label="카테고리 관리" hidden>
+    <div class="modal glass-card">
+      <div class="modal-header">
+        <h2 class="modal-title">카테고리 관리</h2>
+        <button class="modal-close" id="catModalClose" aria-label="닫기">✕</button>
+      </div>
+      <div class="cat-list" id="catList"></div>
+      <div class="cat-add-row">
+        <input type="text" id="newCatInput" class="todo-input" placeholder="새 카테고리 이름..." maxlength="20" />
+        <button class="add-btn small" id="addCatBtn">추가</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 편집 모달 ===== -->
+  <div class="modal-overlay" id="editModal" role="dialog" aria-modal="true" aria-label="할 일 편집" hidden>
+    <div class="modal glass-card">
+      <div class="modal-header">
+        <h2 class="modal-title">할 일 편집</h2>
+        <button class="modal-close" id="editModalClose" aria-label="닫기">✕</button>
+      </div>
+      <div class="edit-form">
+        <input type="text" id="editTextInput" class="todo-input" placeholder="할 일 내용..." maxlength="200" />
+        <div class="input-options" style="margin-top: 0.75rem;">
+          <div class="select-wrap">
+            <select id="editCategorySelect" class="option-select"></select>
+          </div>
+          <div class="select-wrap">
+            <select id="editPrioritySelect" class="option-select">
+              <option value="high">🔴 높음</option>
+              <option value="medium">🟡 보통</option>
+              <option value="low">🟢 낮음</option>
+            </select>
+          </div>
+          <div class="select-wrap">
+            <select id="editRepeatSelect" class="option-select">
+              <option value="none">🔂 반복없음</option>
+              <option value="daily">📅 매일</option>
+              <option value="weekly">📆 매주</option>
+              <option value="monthly">🗓️ 매월</option>
+            </select>
+          </div>
+          <input type="date" id="editDueDateInput" class="date-input" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="cancel-btn" id="editCancelBtn">취소</button>
+        <button class="add-btn" id="editSaveBtn">저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 알림 토스트 ===== -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
