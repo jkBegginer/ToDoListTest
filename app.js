@@ -863,14 +863,28 @@ function bindEvents() {
   editModal.addEventListener('click', (e) => { if (e.target === editModal) closeEditModal(); });
 
   // 템플릿 모달 열기/닫기
-  templateBtn.addEventListener('click', () => {
-    activeTemplateTab = '운동';
-    renderTemplateTabs();
-    renderTemplateItems();
-    templateModal.hidden = false;
-  });
-  templateModalClose.addEventListener('click', () => { templateModal.hidden = true; });
-  templateModal.addEventListener('click', (e) => { if (e.target === templateModal) templateModal.hidden = true; });
+  if (templateBtn) {
+    templateBtn.addEventListener('click', () => {
+      console.log('Template button clicked');
+      activeTemplateTab = '운동';
+      renderTemplateTabs();
+      renderTemplateItems();
+      if (templateModal) {
+        templateModal.hidden = false;
+        console.log('Template modal opened');
+      } else {
+        console.error('templateModal element not found');
+      }
+    });
+  } else {
+    console.error('templateBtn element not found');
+  }
+  if (templateModalClose) {
+    templateModalClose.addEventListener('click', () => { templateModal.hidden = true; });
+  }
+  if (templateModal) {
+    templateModal.addEventListener('click', (e) => { if (e.target === templateModal) templateModal.hidden = true; });
+  }
 
   // 편집 저장
   editSaveBtn.addEventListener('click', saveEdit);
